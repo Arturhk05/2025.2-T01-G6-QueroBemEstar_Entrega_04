@@ -24,17 +24,15 @@ export class User {
     id?: string
     name: string
     password: string
-    createdAt?: Date
-    updatedAt?: Date
   }): User {
-    //TODO: Add domain validations here
+    //TODO: Adicionar validações e regras de negócio aqui
 
     const user = new User({
       id: props.id ?? null,
       name: props.name,
       password: props.password,
-      createdAt: props.createdAt ?? new Date(),
-      updatedAt: props.updatedAt ?? new Date(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
     })
     return user
   }
