@@ -11,5 +11,5 @@ export default defineConfig(
   },
   eslint.configs.recommended,
   tseslint.configs.recommended,
-  prettierConfig
+  prettierConfig,
 )
