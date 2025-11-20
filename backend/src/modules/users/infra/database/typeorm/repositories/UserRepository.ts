@@ -33,12 +33,30 @@ export class UserRepository
       return null
     }
 
-    // Mapeia o UserModel (infra) para a entidade User (domínio)
     const user = User.create({
       nome: userModel.name,
       senha: userModel.password,
     })
-    // Sobrescreve os campos de id e data para refletir o estado do banco
+    Object.assign(user, {
+      id: userModel.id,
+      dataCadastro: userModel.createdAt,
+      dataAtualizacao: userModel.updatedAt,
+    })
+
+    return user
+  }
+
+  async findByName(name: string): Promise<User | null> {
+    const userModel = await this.ormRepository.findOneBy({ name })
+
+    if (!userModel) {
+      return null
+    }
+
+    const user = User.create({
+      nome: userModel.name,
+      senha: userModel.password,
+    })
     Object.assign(user, {
       id: userModel.id,
       dataCadastro: userModel.createdAt,

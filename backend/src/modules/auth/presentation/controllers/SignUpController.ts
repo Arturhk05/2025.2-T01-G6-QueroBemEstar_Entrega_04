@@ -8,7 +8,6 @@ import { HttpRequest, HttpResponse } from "@/shared/protocols/http"
 import { ICreateUser } from "@/modules/users/application/ports/ICreateUser"
 import { NameAlreadyInUse } from "@/shared/errors/NameAlreadyInUse"
 import { InvalidParamError } from "@/shared/errors/InvalidParamError"
-import { MissingParamError } from "@/shared/errors/MissingParamError"
 import { IController } from "@/shared/protocols/controller"
 import { Validation } from "@/shared/protocols/Validation"
 
@@ -38,7 +37,7 @@ export class SignUpController
 
       const isValid = await this.createUser.execute({ nome, senha })
       if (!isValid) {
-        return forbidden(new NameAlreadyInUse())
+        return badRequest(new NameAlreadyInUse(nome))
       }
 
       return noContent()

@@ -6,4 +6,5 @@ export default {
   db_user: process.env.DB_USER || "user",
   db_password: process.env.DB_PASSWORD || "password",
   db_name: process.env.DB_NAME || "quero_bem_estar",
+  jwt_secret: process.env.JWT_SECRET || "your_jwt_secret_key",
 }
