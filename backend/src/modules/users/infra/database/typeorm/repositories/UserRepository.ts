@@ -2,7 +2,7 @@ import { ICreateUserRepository } from "@/modules/users/application/repositories/
 import { Repository } from "typeorm"
 import { UserModel } from "../models/UserModel"
 import { TypeOrmConnection } from "@/main/database/TypeOrmConnection"
-import { User } from "@/modules/users/domain/entities/User"
+import { User } from "@/modules/users/domain/entities/user"
 
 export class UserRepository implements ICreateUserRepository {
   private ormRepository: Repository<UserModel>

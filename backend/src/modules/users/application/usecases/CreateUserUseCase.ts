@@ -1,4 +1,4 @@
-import { User } from "../../domain/entities/User"
+import { User } from "../../domain/entities/user"
 import {
   CreateUserOutput,
   CreateUserInput,
@@ -14,8 +14,6 @@ export class CreateUser implements ICreateUser {
       name: input.name,
       password: input.password,
     })
-
-    console.log("User created:", user)
 
     const result = await this.userRepository.create(user)
 

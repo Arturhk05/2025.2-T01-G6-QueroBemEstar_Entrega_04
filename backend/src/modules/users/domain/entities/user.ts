@@ -20,10 +20,7 @@ export class User {
     this.updatedAt = props.updatedAt
   }
 
-  public static create(props: {
-    name: string
-    password: string
-  }): User {
+  public static create(props: { name: string; password: string }): User {
     //TODO: Adicionar validações e regras de negócio aqui
 
     const user = new User({

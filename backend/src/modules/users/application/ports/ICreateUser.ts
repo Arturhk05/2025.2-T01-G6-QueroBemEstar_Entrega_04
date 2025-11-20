@@ -4,7 +4,6 @@ export interface ICreateUser {
 
 export interface CreateUserInput {
   name: string
-  email: string
   password: string
 }
 

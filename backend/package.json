@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node dist/index.js",
     "start:dev": "nodemon --watch src --exec \"ts-node -r tsconfig-paths/register src/main/index.ts\" -e ts",
+    "up": "docker-compose up -d",
+    "down": "docker-compose down",
     "build": "tsc && tsc-alias"
   },
   "keywords": [],
