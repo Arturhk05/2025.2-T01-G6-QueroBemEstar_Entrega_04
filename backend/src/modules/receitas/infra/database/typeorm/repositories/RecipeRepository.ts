@@ -3,8 +3,12 @@ import { ReceitaModel } from "../models/RecipeModel"
 import { ICreateRecipeRepository } from "../../../../application/repositories/ICreateRecipeRepository"
 import { TypeOrmConnection } from "@/main/database/TypeOrmConnection"
 import { Recipe } from "@/modules/receitas/domain/entities/recipe"
+import { ISearchRecipeRepository } from "@/modules/receitas/application/repositories/ISearchRecipeRepository"
+import { User } from "@/modules/users/domain/entities/user"
 
-export class ReceitaRepository implements ICreateRecipeRepository {
+export class ReceitaRepository
+  implements ICreateRecipeRepository, ISearchRecipeRepository
+{
   private ormRepository: Repository<ReceitaModel>
 
   constructor() {
@@ -13,7 +17,7 @@ export class ReceitaRepository implements ICreateRecipeRepository {
       .getRepository(ReceitaModel)
   }
 
-  public async create(receita: Recipe): Promise<boolean> {
+  async create(receita: Recipe): Promise<boolean> {
     const receitaModel = this.ormRepository.create({
       titulo: receita.titulo,
       descricao: receita.descricao,
@@ -28,5 +32,107 @@ export class ReceitaRepository implements ICreateRecipeRepository {
     const result = await this.ormRepository.save(receitaModel)
 
     return result !== null
+  }
+
+  async findById(id: number): Promise<Recipe | null> {
+    const receitaModel = await this.ormRepository.findOne({
+      where: { id },
+      relations: ["autor"],
+    })
+
+    if (!receitaModel) {
+      return null
+    }
+
+    const autor = User.rebuild({
+      id: receitaModel.autor.id,
+      nome: receitaModel.autor.name,
+      senha: receitaModel.autor.password,
+      dataCadastro: receitaModel.autor.createdAt,
+      dataAtualizacao: receitaModel.autor.updatedAt,
+    })
+
+    const receita = Recipe.rebuild({
+      id: receitaModel.id,
+      titulo: receitaModel.titulo,
+      descricao: receitaModel.descricao,
+      ingredientes: receitaModel.ingredientes,
+      modoPreparo: receitaModel.modoPreparo,
+      fotoUrl: receitaModel.fotoUrl,
+      dataAtualizacao: receitaModel.dataAtualizacao,
+      dataPublicacao: receitaModel.dataPublicacao,
+      autor: autor,
+    })
+
+    return receita
+  }
+
+  async findByAuthorId(authorId: number): Promise<Recipe[]> {
+    const receitaModel = await this.ormRepository.find({
+      where: { autor: { id: authorId } },
+      relations: ["autor"],
+    })
+
+    if (!receitaModel) {
+      return []
+    }
+
+    const receita = receitaModel.map((receitaModel) => {
+      const autor = User.rebuild({
+        id: receitaModel.autor.id,
+        nome: receitaModel.autor.name,
+        senha: receitaModel.autor.password,
+        dataCadastro: receitaModel.autor.createdAt,
+        dataAtualizacao: receitaModel.autor.updatedAt,
+      })
+
+      return Recipe.rebuild({
+        id: receitaModel.id,
+        titulo: receitaModel.titulo,
+        descricao: receitaModel.descricao,
+        ingredientes: receitaModel.ingredientes,
+        modoPreparo: receitaModel.modoPreparo,
+        fotoUrl: receitaModel.fotoUrl,
+        dataAtualizacao: receitaModel.dataAtualizacao,
+        dataPublicacao: receitaModel.dataPublicacao,
+        autor: autor,
+      })
+    })
+
+    return receita
+  }
+
+  async findAll(): Promise<Recipe[]> {
+    const receitaModel = await this.ormRepository.find({
+      relations: ["autor"],
+    })
+
+    if (!receitaModel) {
+      return []
+    }
+
+    const receita = receitaModel.map((receitaModel) => {
+      const autor = User.rebuild({
+        id: receitaModel.autor.id,
+        nome: receitaModel.autor.name,
+        senha: receitaModel.autor.password,
+        dataCadastro: receitaModel.autor.createdAt,
+        dataAtualizacao: receitaModel.autor.updatedAt,
+      })
+
+      return Recipe.rebuild({
+        id: receitaModel.id,
+        titulo: receitaModel.titulo,
+        descricao: receitaModel.descricao,
+        ingredientes: receitaModel.ingredientes,
+        modoPreparo: receitaModel.modoPreparo,
+        fotoUrl: receitaModel.fotoUrl,
+        dataAtualizacao: receitaModel.dataAtualizacao,
+        dataPublicacao: receitaModel.dataPublicacao,
+        autor: autor,
+      })
+    })
+
+    return receita
   }
 }

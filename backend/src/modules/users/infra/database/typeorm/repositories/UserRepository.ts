@@ -33,12 +33,10 @@ export class UserRepository
       return null
     }
 
-    const user = User.create({
+    const user = User.rebuild({
+      id: userModel.id,
       nome: userModel.name,
       senha: userModel.password,
-    })
-    Object.assign(user, {
-      id: userModel.id,
       dataCadastro: userModel.createdAt,
       dataAtualizacao: userModel.updatedAt,
     })
@@ -53,12 +51,10 @@ export class UserRepository
       return null
     }
 
-    const user = User.create({
+    const user = User.rebuild({
+      id: userModel.id,
       nome: userModel.name,
       senha: userModel.password,
-    })
-    Object.assign(user, {
-      id: userModel.id,
       dataCadastro: userModel.createdAt,
       dataAtualizacao: userModel.updatedAt,
     })

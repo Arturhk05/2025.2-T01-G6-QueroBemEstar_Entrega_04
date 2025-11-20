@@ -52,7 +52,10 @@ export class Recipe {
     }
 
     if (titulo.length < 10) {
-      throw new InvalidParamError("titulo", "Título menor que o mínimo de 10 caracteres")
+      throw new InvalidParamError(
+        "titulo",
+        "Título menor que o mínimo de 10 caracteres",
+      )
     }
 
     if (titulo.length > 255) {
@@ -67,7 +70,10 @@ export class Recipe {
     }
 
     if (descricao.length < 10) {
-      throw new InvalidParamError("descricao", "Descrição menor que o mínimo de 10 caracteres")
+      throw new InvalidParamError(
+        "descricao",
+        "Descrição menor que o mínimo de 10 caracteres",
+      )
     }
 
     if (descricao.length > 1000) {
@@ -96,7 +102,10 @@ export class Recipe {
     }
 
     if (modoPreparo.length < 10) {
-      throw new InvalidParamError("modoPreparo", "Modo de preparo menor que o mínimo de 10 caracteres")
+      throw new InvalidParamError(
+        "modoPreparo",
+        "Modo de preparo menor que o mínimo de 10 caracteres",
+      )
     }
 
     if (modoPreparo.length > 2000) {
@@ -128,6 +137,30 @@ export class Recipe {
       fotoUrl: props.fotoUrl,
       dataPublicacao: new Date(),
       dataAtualizacao: new Date(),
+      autor: props.autor,
+    })
+  }
+
+  public static rebuild(props: {
+    id: number
+    titulo: string
+    descricao: string
+    ingredientes: string[]
+    modoPreparo: string
+    fotoUrl: string
+    dataPublicacao: Date
+    dataAtualizacao: Date
+    autor: User
+  }): Recipe {
+    return new Recipe({
+      id: props.id,
+      titulo: props.titulo,
+      descricao: props.descricao,
+      ingredientes: props.ingredientes,
+      modoPreparo: props.modoPreparo,
+      fotoUrl: props.fotoUrl,
+      dataPublicacao: props.dataPublicacao,
+      dataAtualizacao: props.dataAtualizacao,
       autor: props.autor,
     })
   }

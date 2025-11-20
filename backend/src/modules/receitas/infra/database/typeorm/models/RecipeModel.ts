@@ -10,7 +10,7 @@ import {
 @Entity("receitas")
 export class ReceitaModel {
   @PrimaryGeneratedColumn()
-  id: string
+  id: number
 
   @Column()
   titulo: string

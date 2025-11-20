@@ -76,4 +76,21 @@ export class User {
     })
     return user
   }
+
+  public static rebuild(props: {
+    id: number
+    nome: string
+    senha: string
+    dataCadastro: Date
+    dataAtualizacao: Date
+  }): User {
+    const user = new User({
+      id: props.id,
+      nome: props.nome,
+      senha: props.senha,
+      dataCadastro: props.dataCadastro,
+      dataAtualizacao: props.dataAtualizacao,
+    })
+    return user
+  }
 }
