@@ -3,8 +3,8 @@ export interface ICreateUser {
 }
 
 export interface CreateUserInput {
-  name: string
-  password: string
+  nome: string
+  senha: string
 }
 
 export type CreateUserOutput = boolean

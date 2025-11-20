@@ -1,33 +1,33 @@
 export class User {
   public readonly id?: number
-  public name: string
-  public password: string
+  public nome: string
+  public senha: string
 
-  public readonly createdAt: Date
-  public updatedAt: Date
+  public readonly dataCadastro: Date
+  public dataAtualizacao: Date
 
   private constructor(props: {
     id?: number
-    name: string
-    password: string
-    createdAt: Date
-    updatedAt: Date
+    nome: string
+    senha: string
+    dataCadastro: Date
+    dataAtualizacao: Date
   }) {
     this.id = props.id
-    this.name = props.name
-    this.password = props.password
-    this.createdAt = props.createdAt
-    this.updatedAt = props.updatedAt
+    this.nome = props.nome
+    this.senha = props.senha
+    this.dataCadastro = props.dataCadastro
+    this.dataAtualizacao = props.dataAtualizacao
   }
 
-  public static create(props: { name: string; password: string }): User {
+  public static create(props: { nome: string; senha: string }): User {
     //TODO: Adicionar validações e regras de negócio aqui
 
     const user = new User({
-      name: props.name,
-      password: props.password,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      nome: props.nome,
+      senha: props.senha,
+      dataCadastro: new Date(),
+      dataAtualizacao: new Date(),
     })
     return user
   }
