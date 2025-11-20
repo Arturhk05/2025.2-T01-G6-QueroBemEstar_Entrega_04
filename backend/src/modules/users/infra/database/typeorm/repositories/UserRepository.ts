@@ -3,10 +3,11 @@ import { Repository } from "typeorm"
 import { UserModel } from "../models/UserModel"
 import { TypeOrmConnection } from "@/main/database/TypeOrmConnection"
 import { User } from "@/modules/users/domain/entities/user"
-import { ISearchUserRepository } from '@/modules/users/application/repositories/ISearchUserRepository'
+import { ISearchUserRepository } from "@/modules/users/application/repositories/ISearchUserRepository"
 
 export class UserRepository
-  implements ICreateUserRepository, ISearchUserRepository {
+  implements ICreateUserRepository, ISearchUserRepository
+{
   private ormRepository: Repository<UserModel>
 
   constructor() {

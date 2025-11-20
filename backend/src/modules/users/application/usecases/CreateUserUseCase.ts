@@ -7,7 +7,7 @@ import { ICreateUserRepository } from "../repositories/ICreateUserRepository"
 import { UserBuilder } from "../../domain/patterns/UserBuilder"
 
 export class CreateUser implements ICreateUser {
-  constructor(private readonly userRepository: ICreateUserRepository) { }
+  constructor(private readonly userRepository: ICreateUserRepository) {}
 
   async execute(input: CreateUserInput): Promise<CreateUserOutput> {
     const user = new UserBuilder()

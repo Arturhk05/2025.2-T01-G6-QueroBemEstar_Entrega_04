@@ -13,7 +13,7 @@ export interface SignUpRequest {
 }
 
 export class SignUpController implements IController<SignUpRequest, null> {
-  constructor(private createUser: ICreateUser) { }
+  constructor(private createUser: ICreateUser) {}
 
   async handle(request: SignUpRequest): Promise<HttpResponse<null | Error>> {
     const { nome, senha } = request.body
