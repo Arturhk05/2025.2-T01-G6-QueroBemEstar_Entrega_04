@@ -34,3 +34,7 @@ x-access-token: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVz
   "modoPreparo": "Modo de preparo da receita de teste.",
   "fotoUrl": "http://exemplo.com/foto.jpg"
 }
+
+### Get all Receipe
+GET http://localhost:3000/api/receitas
+Content-Type: application/json

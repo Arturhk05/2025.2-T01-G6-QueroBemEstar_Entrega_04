@@ -10,7 +10,7 @@ import { RequiredFieldValidation } from "@/shared/validations/RequiredFieldValid
 import { ValidationComposite } from "@/shared/validations/ValidationComposite"
 import { IsArrayFieldValidation } from "@/shared/validations/IsArrayFieldValidation"
 
-export const makeReceitaControllerFactory = () => {
+export const makeCreateReceitaController = () => {
   const validations: Validation<CreateReceitaRequest>[] = [
     new RequiredFieldValidation<CreateReceitaRequest>("titulo"),
     new RequiredFieldValidation<CreateReceitaRequest>("descricao"),
