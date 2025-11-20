@@ -4,16 +4,13 @@ import {
   ICreateUser,
 } from "../../application/ports/ICreateUser"
 import { ICreateUserRepository } from "../repositories/ICreateUserRepository"
-import { UserBuilder } from "../../domain/patterns/UserBuilder"
+import { User } from "../../domain/entities/user"
 
 export class CreateUser implements ICreateUser {
   constructor(private readonly userRepository: ICreateUserRepository) {}
 
   async execute(input: CreateUserInput): Promise<CreateUserOutput> {
-    const user = new UserBuilder()
-      .comNome(input.nome)
-      .comSenha(input.senha)
-      .build()
+    const user = User.create({ nome: input.nome, senha: input.senha })
 
     const result = await this.userRepository.create(user)
 

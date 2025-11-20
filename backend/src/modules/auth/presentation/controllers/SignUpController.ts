@@ -1,7 +1,14 @@
-import { forbidden, noContent } from "@/shared/helpers/HttpHelpers"
+import {
+  badRequest,
+  forbidden,
+  noContent,
+  serverError,
+} from "@/shared/helpers/HttpHelpers"
 import { HttpRequest, HttpResponse } from "@/shared/protocols/http"
 import { ICreateUser } from "@/modules/users/application/ports/ICreateUser"
 import { NameAlreadyInUse } from "@/shared/errors/NameAlreadyInUse"
+import { InvalidParamError } from "@/shared/errors/InvalidParamError"
+import { MissingParamError } from "@/shared/errors/MissingParamError"
 import { IController } from "@/shared/protocols/controller"
 import { Validation } from "@/shared/protocols/Validation"
 
@@ -21,15 +28,25 @@ export class SignUpController
   async handle(
     request: HttpRequest<SignUpRequest>,
   ): Promise<HttpResponse<null | Error>> {
-    const error = this.validation.validate(request.body)
-    if (error) {
-      return forbidden(error)
+    try {
+      const error = this.validation.validate(request.body)
+      if (error) {
+        return forbidden(error)
+      }
+
+      const { nome, senha } = request.body
+
+      const isValid = await this.createUser.execute({ nome, senha })
+      if (!isValid) {
+        return forbidden(new NameAlreadyInUse())
+      }
+
+      return noContent()
+    } catch (error) {
+      if (error instanceof InvalidParamError) {
+        return badRequest(error as Error)
+      }
+      return serverError(error as Error)
     }
-    const { nome, senha } = request.body
-    const isValid = await this.createUser.execute({ nome, senha })
-    if (!isValid) {
-      return forbidden(new NameAlreadyInUse())
-    }
-    return noContent()
   }
 }

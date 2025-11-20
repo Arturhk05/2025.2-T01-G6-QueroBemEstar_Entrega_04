@@ -1,3 +1,5 @@
+import { InvalidParamError } from "@/shared/errors/InvalidParamError"
+
 export class User {
   public readonly id?: number
   public nome: string
@@ -21,11 +23,44 @@ export class User {
   }
 
   public static create(props: { nome: string; senha: string }): User {
-    //TODO: Adicionar validações e regras de negócio aqui
+    const nomeLimpo = props.nome.trim()
+    const senhaLimpa = props.senha.trim()
+
+    if (nomeLimpo === "") {
+      throw new InvalidParamError("O nome do usuário não pode ser vazio.")
+    }
+
+    if (nomeLimpo.length < 3) {
+      throw new InvalidParamError(
+        "O nome do usuário deve ter no mínimo 3 caracteres.",
+      )
+    }
+
+    if (nomeLimpo.length > 128) {
+      throw new InvalidParamError(
+        "O nome do usuário deve ter no máximo 128 caracteres.",
+      )
+    }
+
+    if (senhaLimpa === "") {
+      throw new InvalidParamError("A senha do usuário não pode ser vazia.")
+    }
+
+    if (senhaLimpa.length < 6) {
+      throw new InvalidParamError(
+        "A senha do usuário deve ter no mínimo 6 caracteres.",
+      )
+    }
+
+    if (senhaLimpa.length > 128) {
+      throw new InvalidParamError(
+        "A senha do usuário deve ter no máximo 128 caracteres.",
+      )
+    }
 
     const user = new User({
-      nome: props.nome,
-      senha: props.senha,
+      nome: nomeLimpo,
+      senha: senhaLimpa,
       dataCadastro: new Date(),
       dataAtualizacao: new Date(),
     })
