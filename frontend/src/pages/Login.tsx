@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { authService } from '../services/api';
+import { useAuth } from '../hooks/useAuth';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [nome, setNome] = useState('');
   const [senha, setSenha] = useState('');
   const [loading, setLoading] = useState(false);
@@ -16,7 +18,8 @@ const Login: React.FC = () => {
 
     const result = await authService.login(nome, senha);
 
-    if (result.success) {
+    if (result.success && result.token) {
+      login(result.token, nome);
       navigate('/');
     } else {
       setError(result.error || 'Erro ao fazer login');
