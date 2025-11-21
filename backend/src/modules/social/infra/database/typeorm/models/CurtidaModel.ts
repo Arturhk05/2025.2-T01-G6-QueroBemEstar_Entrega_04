@@ -15,11 +15,11 @@ export class CurtidaModel {
 
   @ManyToOne(() => UserModel, { onDelete: "CASCADE" })
   @JoinColumn({ name: "usuario_id" })
-  usuario: UserModel
+  autorId: UserModel
 
   @ManyToOne(() => ReceitaModel, { onDelete: "CASCADE" })
   @JoinColumn({ name: "receita_id" })
-  receita: ReceitaModel
+  receitaId: ReceitaModel
 
   @Column({ name: "data_curtida" })
   dataCurtida: Date

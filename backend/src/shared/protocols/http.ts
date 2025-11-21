@@ -8,4 +8,5 @@ export type HttpRequest<T> = {
   headers?: Record<string, string>
   query?: Record<string, string>
   userId?: number
+  params?: Record<string, string | number>
 }
