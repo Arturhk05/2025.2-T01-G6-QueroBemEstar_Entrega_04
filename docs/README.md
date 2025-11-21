@@ -17,9 +17,16 @@ Repositório e documentação da entrega 4
 
 ## Há algo a ser executado?
 
-( ) SIM
+(X) SIM
 
 ( ) NÃO
 
 Se SIM, insira um manual (ou um script) para auxiliar ainda mais os interessados na execução.
 
+# Frontend QueroBemEstar
+
+[Acesse aqui](https://github.com/UnBArqDsw2025-2-Turma01/2025.2-T01-G6-QueroBemEstar_Entrega_04/tree/main/frontend)
+
+# Backend QueroBemEstar
+
+[Acesse aqui](https://github.com/UnBArqDsw2025-2-Turma01/2025.2-T01-G6-QueroBemEstar_Entrega_04/tree/main/backend)
