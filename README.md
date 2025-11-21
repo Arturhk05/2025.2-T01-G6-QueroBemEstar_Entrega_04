@@ -94,7 +94,7 @@ src/
 
 ### Variáveis de ambiente
 
-Se necessário, crie um arquivo `.env` na raiz do frontend com as configurações:
+Se necessário, crie um arquivo `.env` na raiz do frontend com as configurações:a
 
 ```env
 VITE_API_URL=http://localhost:3000
