@@ -1,10 +1,10 @@
 import { Repository } from "typeorm"
-import { IAddCurtidaRepository } from "@/modules/social/application/repositories/IAddCurtidaRepository"
+import { ICurtirReceitaRepository } from "@/modules/social/application/repositories/ICurtirReceitaRepository"
 import { ReceitaModel } from "@/modules/receitas/infra/database/typeorm/models/RecipeModel"
 import { TypeOrmConnection } from "@/main/database/TypeOrmConnection"
 import { Curtida } from "@/modules/social/domain/entities/Curtida"
 
-export class CurtidaRepository implements IAddCurtidaRepository {
+export class CurtidaRepository implements ICurtirReceitaRepository {
   private ormRepository: Repository<ReceitaModel>
 
   constructor() {
