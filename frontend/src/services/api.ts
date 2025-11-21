@@ -1,5 +1,29 @@
 const API_BASE_URL = 'http://localhost:3000/api';
 
+interface Recipe {
+  id: number;
+  titulo: string;
+  descricao: string;
+  ingredientes: string[];
+  modoPreparo: string;
+  fotoUrl: string;
+  dataPublicacao: string;
+  dataAtualizacao: string;
+  autor: {
+    nome: string;
+  };
+}
+
+interface RecipeResponse {
+  data: Recipe[];
+  meta: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}
+
 interface SignupPayload {
   nome: string;
   senha: string;
@@ -101,6 +125,29 @@ export const authService = {
         success: false,
         error: error instanceof Error ? error.message : 'Erro na conexão',
       };
+    }
+  },
+};
+
+export const recipeService = {
+  async getRecipes(page: number = 1, limit: number = 30): Promise<RecipeResponse> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/receitas?page=${page}&limit=${limit}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao buscar receitas');
+      }
+
+      const data: RecipeResponse = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Erro ao buscar receitas:', error);
+      throw error;
     }
   },
 };
