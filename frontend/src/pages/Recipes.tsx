@@ -1,50 +1,163 @@
-import { useState, useEffect, useCallback } from "react";
-import { MainLayout } from "@/components/templates/MainLayout";
-import { RecipeCard } from "@/components/organisms/RecipeCard";
-import { RecipeActions } from "@/components/molecules/RecipeActions";
-import { FeedNavButtons } from "@/components/molecules/FeedNavButtons";
-import { recipes } from "@/data/recipes";
-import { AnimatePresence } from "framer-motion";
+import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { MainLayout } from '@/components/templates/MainLayout';
+import { RecipeCard } from '@/components/organisms/RecipeCard';
+import { RecipeActions } from '@/components/molecules/RecipeActions';
+import { FeedNavButtons } from '@/components/molecules/FeedNavButtons';
+import { recipes as mockRecipes } from '@/data/recipes';
+import { AnimatePresence } from 'framer-motion';
+import { recipeService } from '@/services/api';
+import { useAuth } from '@/hooks/useAuth';
+import { formatRelativeTime } from '@/lib/utils';
+import { Plus } from 'lucide-react';
+import type { Recipe } from '@/types/recipe';
 
 const Recipes = () => {
+  const navigate = useNavigate();
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState<"up" | "down">("down");
+  const [direction, setDirection] = useState<'up' | 'down'>('down');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const { token, isAuthenticated } = useAuth();
+  const [likedRecipes, setLikedRecipes] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      try {
+        setLoading(true);
+        const response = await recipeService.getRecipes(1, 30);
+
+        const transformedRecipes = response.data.map((recipe, index) => ({
+          ...recipe,
+          authorName: recipe.autor.nome,
+          authorAvatarUrl: `https://api.dicebear.com/7.x/avataaars/svg?seed=${recipe.autor.nome}`,
+          mealType: 'Almoço' as const,
+          createdAtRelative: formatRelativeTime(recipe.dataPublicacao),
+          imageUrl: recipe.fotoUrl,
+          title: recipe.titulo,
+          description: recipe.descricao,
+          slug: recipe.titulo.toLowerCase().replace(/\s+/g, '-'),
+          likes: 0,
+          comments: 0,
+          saves: 0,
+        }));
+
+        setRecipes(transformedRecipes);
+        setTotalPages(response.meta.totalPages);
+        setCurrentPage(1);
+        setError(null);
+      } catch (err) {
+        console.error('Erro ao carregar receitas:', err);
+        setRecipes(mockRecipes as Recipe[]);
+        setTotalPages(1);
+        setCurrentPage(1);
+        setError('Usando dados de demonstração');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecipes();
+  }, []);
 
   const currentRecipe = recipes[currentIndex];
   const hasPrevious = currentIndex > 0;
   const hasNext = currentIndex < recipes.length - 1;
 
+  const loadMoreRecipes = useCallback(async () => {
+    if (currentPage >= totalPages || loadingMore) return;
+
+    try {
+      setLoadingMore(true);
+      const nextPage = currentPage + 1;
+      const response = await recipeService.getRecipes(nextPage, 30);
+
+      const transformedRecipes = response.data.map((recipe, index) => ({
+        ...recipe,
+        authorName: recipe.autor.nome,
+        authorAvatarUrl: `https://api.dicebear.com/7.x/avataaars/svg?seed=${recipe.autor.nome}`,
+        mealType: 'Almoço' as const,
+        createdAtRelative: formatRelativeTime(recipe.dataPublicacao),
+        imageUrl: recipe.fotoUrl,
+        title: recipe.titulo,
+        description: recipe.descricao,
+        slug: recipe.titulo.toLowerCase().replace(/\s+/g, '-'),
+        likes: 0,
+        comments: 0,
+        saves: 0,
+      }));
+
+      setRecipes((prev) => [...prev, ...transformedRecipes]);
+      setCurrentPage(nextPage);
+    } catch (err) {
+      console.error('Erro ao carregar mais receitas:', err);
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [currentPage, totalPages, loadingMore]);
+
+  const handleLikeRecipe = useCallback(
+    async (recipeId: number) => {
+      if (!isAuthenticated || !token) {
+        alert('Você precisa estar logado para curtir uma receita');
+        return;
+      }
+
+      if (likedRecipes.has(recipeId)) {
+        alert('Você já curtiu esta receita');
+        return;
+      }
+
+      try {
+        const result = await recipeService.likeRecipe(recipeId, token);
+        if (result.success) {
+          setLikedRecipes((prev) => new Set([...prev, recipeId]));
+        } else {
+          alert(result.error || 'Erro ao curtir receita');
+        }
+      } catch (err) {
+        console.error('Erro ao curtir receita:', err);
+        alert('Erro ao curtir receita');
+      }
+    },
+    [isAuthenticated, token, likedRecipes]
+  );
+
   const goToPrevious = useCallback(() => {
     if (hasPrevious) {
-      setDirection("up");
+      setDirection('up');
       setCurrentIndex((prev) => prev - 1);
     }
   }, [hasPrevious]);
 
   const goToNext = useCallback(() => {
     if (hasNext) {
-      setDirection("down");
+      setDirection('down');
       setCurrentIndex((prev) => prev + 1);
+    } else if (currentPage < totalPages && !loadingMore) {
+      loadMoreRecipes();
     }
-  }, [hasNext]);
+  }, [hasNext, currentPage, totalPages, loadingMore, loadMoreRecipes]);
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowUp") {
+      if (e.key === 'ArrowUp') {
         e.preventDefault();
         goToPrevious();
-      } else if (e.key === "ArrowDown") {
+      } else if (e.key === 'ArrowDown') {
         e.preventDefault();
         goToNext();
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [goToPrevious, goToNext]);
 
-  // Scroll navigation
   useEffect(() => {
     let isScrolling = false;
     let scrollTimeout: NodeJS.Timeout;
@@ -68,9 +181,9 @@ const Recipes = () => {
       }
     };
 
-    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener('wheel', handleWheel, { passive: false });
     return () => {
-      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener('wheel', handleWheel);
       clearTimeout(scrollTimeout);
     };
   }, [goToPrevious, goToNext]);
@@ -78,42 +191,80 @@ const Recipes = () => {
   return (
     <MainLayout>
       <div className="relative flex items-center justify-center min-h-[calc(100vh-8rem)]">
-        {/* Left Actions */}
-        <div className="absolute left-8 top-1/2 -translate-y-1/2 z-10 hidden lg:block">
-          <RecipeActions
-            likes={currentRecipe.likes}
-            comments={currentRecipe.comments}
-            saves={currentRecipe.saves}
-          />
-        </div>
+        {/* Botão Flutuante para Criar Receita */}
+        <button
+          onClick={() => navigate('/receitas/criar')}
+          className="fixed bottom-20 right-8 z-20 flex items-center justify-center w-14 h-14 bg-primary hover:bg-primary/90 text-white rounded-full shadow-lg transition-all duration-200 hover:scale-110"
+          title="Criar nova receita"
+        >
+          <Plus className="h-6 w-6" />
+        </button>
 
-        {/* Center Card */}
-        <div className="flex items-center justify-center">
-          <AnimatePresence mode="wait" custom={direction}>
-            <RecipeCard key={currentRecipe.id} recipe={currentRecipe} direction={direction} />
-          </AnimatePresence>
-        </div>
-
-        {/* Right Navigation */}
-        <div className="absolute right-8 top-1/2 -translate-y-1/2 z-10 hidden lg:block">
-          <FeedNavButtons
-            onPrevious={goToPrevious}
-            onNext={goToNext}
-            hasPrevious={hasPrevious}
-            hasNext={hasNext}
-          />
-        </div>
-
-        {/* Mobile Actions */}
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-10 lg:hidden">
-          <div className="flex items-center gap-4 bg-card rounded-full shadow-lg p-2">
-            <RecipeActions
-              likes={currentRecipe.likes}
-              comments={currentRecipe.comments}
-              saves={currentRecipe.saves}
-            />
+        {loading ? (
+          <div className="text-center">
+            <p className="text-lg text-muted-foreground">Carregando receitas...</p>
           </div>
-        </div>
+        ) : recipes.length === 0 ? (
+          <div className="text-center">
+            <p className="text-lg text-muted-foreground">Nenhuma receita encontrada</p>
+          </div>
+        ) : (
+          <>
+            {/* Left Actions */}
+            <div className="absolute left-8 top-1/2 -translate-y-1/2 z-10 hidden lg:block">
+              <RecipeActions
+                recipeId={currentRecipe?.id || 0}
+                likes={currentRecipe?.likes || 0}
+                comments={currentRecipe?.comments || 0}
+                saves={currentRecipe?.saves || 0}
+                onLike={() => handleLikeRecipe(currentRecipe?.id || 0)}
+              />
+            </div>
+
+            {/* Center Card */}
+            <div className="flex items-center justify-center">
+              <AnimatePresence mode="wait" custom={direction}>
+                {currentRecipe && <RecipeCard key={currentRecipe.id} recipe={currentRecipe} direction={direction} />}
+              </AnimatePresence>
+            </div>
+
+            {/* Right Navigation */}
+            <div className="absolute right-8 top-1/2 -translate-y-1/2 z-10 hidden lg:block">
+              <FeedNavButtons onPrevious={goToPrevious} onNext={goToNext} hasPrevious={hasPrevious} hasNext={hasNext} />
+            </div>
+
+            {/* Mobile Actions */}
+            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-10 lg:hidden">
+              <div className="flex items-center gap-4 bg-card rounded-full shadow-lg p-2">
+                <RecipeActions
+                  recipeId={currentRecipe?.id || 0}
+                  likes={currentRecipe?.likes || 0}
+                  comments={currentRecipe?.comments || 0}
+                  saves={currentRecipe?.saves || 0}
+                  onLike={() => handleLikeRecipe(currentRecipe?.id || 0)}
+                />
+              </div>
+            </div>
+          </>
+        )}
+
+        {error && (
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg">
+            {error}
+          </div>
+        )}
+
+        {!loading && recipes.length > 0 && !hasNext && currentPage >= totalPages && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-blue-100 text-blue-800 px-4 py-2 rounded-lg">
+            ✓ Você chegou ao final das receitas!
+          </div>
+        )}
+
+        {loadingMore && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-gray-100 text-gray-800 px-4 py-2 rounded-lg">
+            ⏳ Carregando mais receitas...
+          </div>
+        )}
       </div>
     </MainLayout>
   );
