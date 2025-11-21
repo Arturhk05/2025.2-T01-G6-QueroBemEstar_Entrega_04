@@ -1,73 +1,141 @@
-# Welcome to your Lovable project
+# Frontend - Quero Bem Estar
 
-## Project info
+Este é o frontend do projeto Quero Bem Estar, uma aplicação web moderna para gerenciamento de receitas, competições e bem-estar social.
 
-**URL**: https://lovable.dev/projects/a1a8307b-e40e-49c3-8fc8-009229408a9f
+## 🚀 Tecnologias utilizadas
 
-## How can I edit this code?
+- **React** - Biblioteca para interfaces de usuário
+- **TypeScript** - Superset do JavaScript com tipagem estática
+- **Vite** - Ferramenta de build rápida e moderna
+- **Tailwind CSS** - Framework CSS utility-first
+- **shadcn/ui** - Biblioteca de componentes UI
+- **Tanstack Query** - Gerenciamento de estado para requisições
+- **React Hook Form** - Gerenciamento de formulários
+- **Framer Motion** - Animações e transições
 
-There are several ways of editing your application.
+## 📋 Pré-requisitos
 
-**Use Lovable**
+Antes de executar o projeto, certifique-se de ter instalado:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/a1a8307b-e40e-49c3-8fc8-009229408a9f) and start prompting.
+- [Node.js](https://nodejs.org/) (versão 18 ou superior)
+- [npm](https://www.npmjs.com/) (geralmente vem com o Node.js)
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🚀 Como executar o projeto
 
-**Use your preferred IDE**
+### 1. Instalação das dependências
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Clone o repositório e navegue até a pasta do frontend:
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+```bash
+cd frontend
+npm install
+```
 
-Follow these steps:
+### 2. Executar em modo desenvolvimento
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+O projeto será executado em `http://localhost:5173` (ou outra porta disponível).
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### 3. Build para produção
 
-**Use GitHub Codespaces**
+```bash
+# Build otimizado para produção
+npm run build
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Visualizar o build local
+npm run preview
+```
 
-## What technologies are used for this project?
+### 4. Linting
 
-This project is built with:
+```bash
+# Verificar problemas de código
+npm run lint
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 📚 Scripts disponíveis
 
-## How can I deploy this project?
+- `npm run dev` - Executa o projeto em modo desenvolvimento com hot-reload
+- `npm run build` - Cria build otimizado para produção
+- `npm run build:dev` - Cria build em modo desenvolvimento
+- `npm run preview` - Visualiza o build de produção localmente
+- `npm run lint` - Executa verificações de linting no código
 
-Simply open [Lovable](https://lovable.dev/projects/a1a8307b-e40e-49c3-8fc8-009229408a9f) and click on Share -> Publish.
+## 🗂️ Estrutura do projeto
 
-## Can I connect a custom domain to my Lovable project?
+```
+src/
+├── components/          # Componentes reutilizáveis
+│   ├── atoms/          # Componentes básicos (botões, inputs, etc.)
+│   ├── molecules/      # Componentes compostos
+│   ├── organisms/      # Componentes complexos
+│   ├── templates/      # Templates de página
+│   └── ui/            # Componentes do shadcn/ui
+├── contexts/           # Contextos React (auth, etc.)
+├── hooks/             # Custom hooks
+├── lib/               # Utilitários e configurações
+├── pages/             # Páginas da aplicação
+├── services/          # Serviços (API, etc.)
+└── types/             # Tipos TypeScript
+```
 
-Yes, you can!
+## 🌐 Principais funcionalidades
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- **Autenticação** - Login e registro de usuários
+- **Gerenciamento de Receitas** - Criação, visualização e interação com receitas
+- **Sistema Social** - Curtidas, comentários e interações entre usuários
+- **Competições** - Participação em competições de receitas
+- **Configurações** - Personalização do perfil e preferências
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## 🔧 Configuração do ambiente
+
+### Variáveis de ambiente
+
+Se necessário, crie um arquivo `.env` na raiz do frontend com as configurações:
+
+```env
+VITE_API_URL=http://localhost:3000
+```
+
+### Conectando com o Backend
+
+Certifique-se de que o backend esteja rodando em `http://localhost:3000` (ou ajuste a URL no arquivo de configuração da API).
+
+Para mais informações sobre como executar o backend, consulte o README na pasta `backend/`.
+
+## 🎨 Customização
+
+### Cores e Tema
+
+O projeto utiliza Tailwind CSS com configuração customizada. Você pode modificar as cores e temas no arquivo:
+
+- `tailwind.config.ts` - Configuração do Tailwind
+- `src/index.css` - Variáveis CSS customizadas
+
+### Componentes UI
+
+Os componentes UI são baseados no shadcn/ui. Para adicionar novos componentes:
+
+1. Consulte a [documentação do shadcn/ui](https://ui.shadcn.com/)
+2. Use o CLI para adicionar componentes: `npx shadcn@latest add [component]`
+
+## 🐛 Troubleshooting
+
+### Porta já em uso
+
+- Se a porta 5173 estiver em uso, o Vite automaticamente tentará a próxima porta disponível
+- Você pode especificar uma porta específica: `npm run dev -- --port 3001`
+
+### Erro de conexão com a API
+
+- Certifique-se de que o backend está rodando
+- Verifique se a API_BASE_URL está correta no arquivo `src/services/api.ts`
+- Verifique se não há problemas de CORS
+
+### Problemas de dependências
+
+- Remova a pasta `node_modules` e execute `npm install` novamente
+- Certifique-se de estar usando a versão correta do Node.js
