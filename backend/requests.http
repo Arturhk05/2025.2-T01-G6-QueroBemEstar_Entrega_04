@@ -15,7 +15,7 @@ POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-  "nome": "joao",
+  "nome": "artur",
   "senha": "123456"
 }
 
@@ -42,7 +42,8 @@ Content-Type: application/json
 ### Like a Receipe
 POST http://localhost:3000/api/curtidas/39
 Content-Type: application/json
-x-access-token: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJOYW1lIjoiam9hbyIsImlhdCI6MTc2MzY2ODU5NiwiZXhwIjoxNzYzNjk3Mzk2fQ.cdDd1s3ccecYPC1oyPYtD2wsfswySPY875Vszbu86ks
+x-access-token: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJOYW1lIjoiYXJ0dXIiLCJpYXQiOjE3NjM2OTIyMjAsImV4cCI6MTc2MzcyMTAyMH0.HG-WDuARsk4A1s1o4QGXEJnoW0iDykcHS6XXZ-sPthQ
 
 ### Get Likes of a Receipe
-
+GET http://localhost:3000/api/curtidas/39
+Content-Type: application/json
