@@ -5,6 +5,7 @@ import { AuthMiddleware } from "@/shared/middleware/AuthMiddleware"
 import { UserRepository } from "@/modules/users/infra/database/typeorm/repositories/UserRepository"
 import { JwtAdapter } from "@/modules/auth/infra/adapters/JwtAdapter"
 import { makeCurtirReceitaController } from "../factories/CurtirReceitaControllerFactory"
+import { makeGetReceitaCurtidasController } from "../factories/GetReceitaCurtidasControllerFactory"
 
 const createAuthMiddleware = (): AuthMiddleware => {
   const tokenGenerator = new JwtAdapter()
@@ -17,5 +18,9 @@ export default (router: Router): void => {
     "/curtidas/:receitaId",
     adaptMiddleware(createAuthMiddleware()),
     adaptRoute(makeCurtirReceitaController()),
+  )
+  router.get(
+    "/curtidas/:receitaId",
+    adaptRoute(makeGetReceitaCurtidasController()),
   )
 }

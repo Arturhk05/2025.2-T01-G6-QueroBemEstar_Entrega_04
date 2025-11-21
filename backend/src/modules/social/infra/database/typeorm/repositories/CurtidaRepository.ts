@@ -17,7 +17,6 @@ export class CurtidaRepository
   }
 
   async curtir(curtida: Curtida): Promise<boolean> {
-    console.log("CurtidaRepository - curtir:", curtida)
     const result = await this.ormRepository.save({
       autorId: { id: curtida.autorId },
       receitaId: { id: curtida.receitaId },
@@ -44,11 +43,13 @@ export class CurtidaRepository
       where: {
         receitaId: { id: receitaId },
       },
+      relations: { autorId: true, receitaId: true },
     })
 
     if (!curtidaModels) {
       return []
     }
+
 
     const curtidas = curtidaModels.map((curtidaModel) =>
       Curtida.reBuild({
