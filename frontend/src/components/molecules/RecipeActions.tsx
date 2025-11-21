@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { cn } from '@/lib/utils';
 import { recipeService } from '@/services/api';
 import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/use-toast';
 
 interface Like {
   id: number;
@@ -38,7 +39,8 @@ export const RecipeActions = ({
   const [isLiking, setIsLiking] = useState(false);
   const [likeCount, setLikeCount] = useState(likes);
   const [loadingLikes, setLoadingLikes] = useState(false);
-  const { userId } = useAuth();
+  const { userId, isAuthenticated } = useAuth();
+  const { toast } = useToast();
 
   const fetchLikes = useCallback(async () => {
     setLoadingLikes(true);
@@ -62,6 +64,15 @@ export const RecipeActions = ({
   }, [fetchLikes]);
 
   const handleLike = async () => {
+    if (!isAuthenticated) {
+      toast({
+        title: 'Erro de autenticação',
+        description: 'Você precisa estar logado para curtir uma receita',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     if (liked) {
       return;
     }
