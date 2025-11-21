@@ -1,33 +1,19 @@
-# RepositorioTemplate
-Esse repositório é para ser utilizado pelos grupos como um template inicial.
-As seções do Template NÃO DEVEM SER OMITIDAS, sendo TODAS RELEVANTES.
-Demais diretrizes constam no Moodle.
-
-**!! Atenção: Renomeie o seu repositório para (Ano.Semestre)(Turma)_(Grupo)_(NomeDoProjeto)_(Entrega_04)*. !!** 
-
-**!! *Não coloque os nomes dos alunos no título do repositório*. !!**
-
-**!! *Exemplo de título correto: 2025.1(T01)_G1_Embarcado_Entrega_04*. !!**  
- 
- (Apague esses comentários)
-
-# Nome do Projeto
+# Quero bem estar
 
 **Código da Disciplina**: FGA0208<br>
-**Número do Grupo**: XX<br>
+**Número do Grupo**: 6<br>
 **Entrega**: 04<br>
 
 ## Alunos
 |Matrícula | Aluno |
 | -- | -- |
-| xx/xxxxxx  |  xxxx xxxx xxxxx |
-| xx/xxxxxx  |  xxxx xxxx xxxxx |
+| 222024579  |  Filipe Bressanelli |
+| 222006884  |  Jose Vinicius |
+| 231034082  |  Artur Krauspenhar |
 
-## Sobre 
-Contextualize, usando referências, links, e outros materiais como fontes.
+## Sobre
 
-## Screenshots da Quarta Entrega
-Adicione 2 ou mais screenshots em termos de artefatos realizados na entrega.
+Repositório e documentação da entrega 4
 
 ## Há algo a ser executado?
 
@@ -37,5 +23,3 @@ Adicione 2 ou mais screenshots em termos de artefatos realizados na entrega.
 
 Se SIM, insira um manual (ou um script) para auxiliar ainda mais os interessados na execução.
 
-## Informações Complementares 
-Quaisquer outras informações adicionais podem ser descritas nessa seção.
