@@ -6,7 +6,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 
 export const Topbar = () => {
-  const isDev = import.meta.env.MODE !== 'production';
   const { isAuthenticated, userName, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -48,22 +47,20 @@ export const Topbar = () => {
                 <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=User" alt="Usuário" />
                 <AvatarFallback>U</AvatarFallback>
               </Avatar>
-              {isDev ? (
-                <div className="hidden md:flex items-center gap-2">
-                  <Link
-                    to="/login"
-                    className="text-sm px-3 py-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-100 hover:bg-emerald-100"
-                  >
-                    Entrar
-                  </Link>
-                  <Link
-                    to="/register"
-                    className="text-sm px-3 py-1 rounded-md bg-white text-emerald-600 border border-emerald-200 hover:bg-emerald-50"
-                  >
-                    Registrar
-                  </Link>
-                </div>
-              ) : null}
+              <div className="hidden md:flex items-center gap-2">
+                <Link
+                  to="/login"
+                  className="text-sm px-3 py-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-100 hover:bg-emerald-100"
+                >
+                  Entrar
+                </Link>
+                <Link
+                  to="/register"
+                  className="text-sm px-3 py-1 rounded-md bg-white text-emerald-600 border border-emerald-200 hover:bg-emerald-50"
+                >
+                  Registrar
+                </Link>
+              </div>
             </div>
           )}
         </div>
