@@ -54,6 +54,14 @@ interface LoginResponse {
   error?: string;
 }
 
+interface CreateRecipePayload {
+  titulo: string;
+  descricao: string;
+  ingredientes: string[];
+  modoPreparo: string;
+  fotoUrl: string;
+}
+
 export const authService = {
   async signup(nome: string, password: string): Promise<SignupResponse> {
     try {
@@ -204,6 +212,35 @@ export const recipeService = {
       console.error('Erro ao buscar curtidas:', error);
       return {
         count: 0,
+        error: error instanceof Error ? error.message : 'Erro na conexão',
+      };
+    }
+  },
+
+  async createRecipe(recipeData: CreateRecipePayload, token: string): Promise<{ success: boolean; error?: string }> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/receitas`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': `Bearer ${token}`,
+        },
+        body: JSON.stringify(recipeData),
+      });
+
+      if (response.status === 201 || response.status === 204) {
+        return { success: true };
+      }
+
+      const data = await response.json();
+      return {
+        success: false,
+        error: data.message || 'Erro ao criar receita',
+      };
+    } catch (error) {
+      console.error('Erro ao criar receita:', error);
+      return {
+        success: false,
         error: error instanceof Error ? error.message : 'Erro na conexão',
       };
     }

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MainLayout } from '@/components/templates/MainLayout';
 import { RecipeCard } from '@/components/organisms/RecipeCard';
 import { RecipeActions } from '@/components/molecules/RecipeActions';
@@ -8,9 +9,11 @@ import { AnimatePresence } from 'framer-motion';
 import { recipeService } from '@/services/api';
 import { useAuth } from '@/hooks/useAuth';
 import { formatRelativeTime } from '@/lib/utils';
+import { Plus } from 'lucide-react';
 import type { Recipe } from '@/types/recipe';
 
 const Recipes = () => {
+  const navigate = useNavigate();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState<'up' | 'down'>('down');
@@ -188,6 +191,15 @@ const Recipes = () => {
   return (
     <MainLayout>
       <div className="relative flex items-center justify-center min-h-[calc(100vh-8rem)]">
+        {/* Botão Flutuante para Criar Receita */}
+        <button
+          onClick={() => navigate('/receitas/criar')}
+          className="fixed bottom-20 right-8 z-20 flex items-center justify-center w-14 h-14 bg-primary hover:bg-primary/90 text-white rounded-full shadow-lg transition-all duration-200 hover:scale-110"
+          title="Criar nova receita"
+        >
+          <Plus className="h-6 w-6" />
+        </button>
+
         {loading ? (
           <div className="text-center">
             <p className="text-lg text-muted-foreground">Carregando receitas...</p>

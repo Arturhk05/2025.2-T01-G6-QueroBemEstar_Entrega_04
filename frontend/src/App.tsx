@@ -7,6 +7,7 @@ import { AuthProvider } from './contexts/AuthProvider';
 import { Topbar } from './components/organisms/Topbar';
 import Home from './pages/Home';
 import Recipes from './pages/Recipes';
+import CreateRecipe from './pages/CreateRecipe';
 import Competicoes from './pages/Competicoes';
 import Configuracoes from './pages/Configuracoes';
 import NotFound from './pages/NotFound';
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/receitas" element={<Recipes />} />
+            <Route path="/receitas/criar" element={<CreateRecipe />} />
             <Route path="/competicoes" element={<Competicoes />} />
             <Route path="/configuracoes" element={<Configuracoes />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
