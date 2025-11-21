@@ -4,9 +4,9 @@
   "description": "Quero Bem Estar - Aplicação de receitas saudáveis",
   "main": "backend/dist/main/index.js",
   "scripts": {
-    "start": "cd backend && npm install && npm run build && npm start",
+    "start": "cd backend && node dist/main/index.js",
     "build": "cd backend && npm install && npm run build",
-    "heroku-postbuild": "cd backend && npm run build"
+    "heroku-postbuild": "cd backend && npm install && npm run build"
   },
   "engines": {
     "node": "18.x"
